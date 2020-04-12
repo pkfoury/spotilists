@@ -4,6 +4,8 @@ import { authEndpoint, clientId, redirectUri, scopes } from "./config";
 import hash from "./hash";
 import Player from "./Player";
 import "./App.css";
+import Search from "./Search";
+import Playlists from "./Playlists";
 
 class App extends Component {
 	constructor() {
@@ -70,23 +72,21 @@ class App extends Component {
 	render() {
 		return (
 			<div className="App">
-				{!this.state.token && (
-					<a
-						className="btn btn--loginApp-link"
+				{this.state.token ?
+					<div>
+						<Player
+							item={this.state.item}
+							is_playing={this.state.is_playing}
+							progress_ms={this.progress_ms}
+						/>
+						<Playlists token={this.state.token} />
+					</div>
+					:
+					<a className="btn btn--loginApp-link"
 						href={`${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join(
 							"%20"
 						)}&response_type=token&show_dialog=true`}
-					>
-						Login to Spotify
-					</a>
-				)}
-				{this.state.token && (
-					<Player
-						item={this.state.item}
-						is_playing={this.state.is_playing}
-						progress_ms={this.progress_ms}
-					/>
-				)}
+					>Login to Spotify</a>}
 			</div>
 		);
 	}
